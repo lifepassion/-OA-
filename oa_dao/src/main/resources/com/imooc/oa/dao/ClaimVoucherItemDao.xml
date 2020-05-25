@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.imooc.oa.dao.ClaimVoucherItemDao">
+
+    <resultMap type="ClaimVoucherItem" id="ClaimVoucherItemMap">
+        <result property="id" column="id" />
+        <result property="claimVoucherId" column="claim_voucher_id" />
+        <result property="item" column="item" />
+        <result property="amount" column="amount" />
+        <result property="comment" column="comment" />
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="selectByClaimVoucher" resultMap="ClaimVoucherItemMap" parameterType="Integer">
+        select
+          id, claim_voucher_id, item, amount, comment
+        from oa.claim_voucher_item
+        where claim_voucher_id = #{cvid} order by id
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true" parameterType="claimVoucherItem">
+        insert into oa.claim_voucher_item(claim_voucher_id, item, amount, comment)
+        values (#{claimVoucherId}, #{item}, #{amount}, #{comment})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update" parameterType="claimVoucherItem">
+        update oa.claim_voucher_item
+        <set>
+            <if test="claimVoucherId != null">
+                claim_voucher_id = #{claimVoucherId},
+            </if>
+            <if test="item != null and item != ''">
+                item = #{item},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="comment != null and comment != ''">
+                comment = #{comment},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="delete" parameterType="String">
+        delete from oa.claim_voucher_item where id = #{id}
+    </delete>
+
+</mapper>
